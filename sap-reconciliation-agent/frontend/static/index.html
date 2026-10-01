@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Cloud | SAP S/4HANA Data Governance & Reconciliation</title>
+<!-- Google Fonts & Material Symbols -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --google-blue: #1a73e8;
+    --google-blue-hover: #1557b0;
+    --google-blue-light: #e8f0fe;
+    --google-red: #d93025;
+    --google-red-light: #fce8e6;
+    --google-yellow: #f9ab00;
+    --google-yellow-light: #fef7e0;
+    --google-green: #1e8e3e;
+    --google-green-light: #e6f4ea;
+    
+    --surface-bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --border-color: #dadce0;
+    --border-subtle: #f1f3f4;
+    
+    --text-primary: #202124;
+    --text-secondary: #5f6368;
+    --text-tertiary: #80868b;
+    
+    --elevation-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+    --elevation-2: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+    --elevation-3: 0 5px 15px rgba(60,64,67,0.25);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--surface-bg);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Google Multi-Color Top Strip */
+  .google-top-strip {
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, #4285F4 0%, #4285F4 25%, #EA4335 25%, #EA4335 50%, #FBBC04 50%, #FBBC04 75%, #34A853 75%, #34A853 100%);
+  }
+
+  /* Google Cloud Console Style Header */
+  header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.65rem 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 20;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .google-logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .google-logo-icon {
+    font-size: 1.7rem;
+    color: var(--google-blue);
+  }
+  .header-divider {
+    height: 22px;
+    width: 1px;
+    background: var(--border-color);
+  }
+  .app-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #3c4043;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .google-chip {
+    padding: 0.35rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .chip-blue { background: var(--google-blue-light); color: var(--google-blue); }
+  .chip-green { background: var(--google-green-light); color: var(--google-green); }
+
+  /* Workspace Layout */
+  .workspace-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Google Sidebar */
+  .g-sidebar {
+    width: 390px;
+    background: #ffffff;
+    border-right: 1px solid var(--border-color);
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    overflow-y: auto;
+  }
+  .sidebar-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  /* Google Button Styles */
+  .g-btn {
+    font-family: 'Google Sans', 'Roboto', sans-serif;
+    font-weight: 500;
+    border-radius: 20px;
+    border: none;
+    padding: 0.65rem 1.2rem;
+    font-size: 0.88rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .g-btn-primary {
+    background: var(--google-blue);
+    color: #ffffff;
+    box-shadow: 0 1px 2px rgba(26,115,232,0.3);
+  }
+  .g-btn-primary:hover {
+    background: var(--google-blue-hover);
+    box-shadow: 0 2px 4px rgba(26,115,232,0.4);
+  }
+  .g-btn-tonal {
+    background: var(--google-blue-light);
+    color: var(--google-blue);
+    border: 1px solid #d2e3fc;
+  }
+  .g-btn-tonal:hover {
+    background: #d8e6fc;
+  }
+  .g-btn-success {
+    background: var(--google-green);
+    color: #ffffff;
+    box-shadow: 0 1px 2px rgba(30,142,62,0.3);
+  }
+  .g-btn-success:hover {
+    background: #177332;
+    box-shadow: 0 2px 4px rgba(30,142,62,0.4);
+  }
+  .g-btn-success:disabled {
+    background: #dadce0;
+    color: #80868b;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .g-btn-outlined {
+    background: #ffffff;
+    color: var(--google-blue);
+    border: 1px solid var(--border-color);
+  }
+  .g-btn-outlined:hover {
+    background: var(--surface-bg);
+  }
+
+  /* Form Inputs (Google Outlined Text Field Style) */
+  .g-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .g-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  .g-input, .g-select, .g-textarea {
+    font-family: inherit;
+    font-size: 0.88rem;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--text-primary);
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+  .g-input:focus, .g-select:focus, .g-textarea:focus {
+    border-color: var(--google-blue);
+    box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
+  }
+
+  /* File Dropzone */
+  .g-dropzone {
+    border: 2px dashed #bdc1c6;
+    border-radius: 12px;
+    padding: 1.1rem;
+    text-align: center;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .g-dropzone:hover {
+    border-color: var(--google-blue);
+    background: #f8fbff;
+  }
+
+  /* Expert Approval Card */
+  .g-expert-card {
+    background: #fbfdff;
+    border: 1px solid #c2e7ff;
+    border-radius: 12px;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  /* Main Workspace Area */
+  .g-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 1.6rem 2rem;
+    gap: 1.4rem;
+  }
+
+  /* Google Success Banner */
+  .g-banner-success {
+    background: var(--google-green-light);
+    border: 1px solid #a8dab5;
+    border-radius: 10px;
+    padding: 0.9rem 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #0d652d;
+    font-size: 0.9rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* Google KPI Cards Grid */
+  .g-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+  }
+  .g-kpi-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .g-kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--border-color);
+  }
+  .kpi-score::before { background: var(--google-yellow); }
+  .kpi-score.score-green::before { background: var(--google-green); }
+  .kpi-records::before { background: var(--google-blue); }
+  .kpi-fields::before { background: #5f6368; }
+  .kpi-discrepancies::before { background: var(--google-red); }
+
+  .kpi-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .kpi-value {
+    font-size: 2.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .kpi-subtext {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  /* Google Search & Filters Bar */
+  .g-filter-bar {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.9rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+  }
+  .filter-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+  .search-pill-wrapper {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .search-pill-wrapper span {
+    position: absolute;
+    left: 12px;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+  }
+  .search-pill {
+    width: 100%;
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    background: #f1f3f4;
+    padding: 0.55rem 1rem 0.55rem 2.4rem;
+    font-size: 0.88rem;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .search-pill:focus {
+    background: #ffffff;
+    border-color: var(--google-blue);
+    box-shadow: 0 1px 3px rgba(60,64,67,0.2);
+  }
+
+  /* Discrepancy Table Card */
+  .g-table-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+  }
+  .g-table-header {
+    padding: 1rem 1.4rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+  }
+  .g-table-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .table-scroll-area {
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  table.g-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+  table.g-table th {
+    position: sticky;
+    top: 0;
+    background: #f8f9fa;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    font-weight: 500;
+    color: var(--text-secondary);
+    z-index: 2;
+    white-space: nowrap;
+  }
+  table.g-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+  table.g-table tr:hover {
+    background: #f8fbff;
+  }
+  .tag-truth {
+    color: var(--google-green);
+    background: var(--google-green-light);
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+  }
+  .tag-bq {
+    color: var(--google-red);
+    background: var(--google-red-light);
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  /* Formal Google SAP Confirmation Modal */
+  .modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(32,33,36,0.6);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-dialog {
+    background: #ffffff;
+    width: 660px;
+    max-width: 95vw;
+    border-radius: 16px;
+    box-shadow: var(--elevation-3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .modal-header-hero {
+    background: linear-gradient(135deg, #1e8e3e 0%, #137333 100%);
+    color: #ffffff;
+    padding: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .modal-check-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-body {
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    font-size: 0.88rem;
+  }
+  .cert-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    background: var(--surface-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .cert-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .cert-item-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .cert-item-value {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .modal-footer {
+    padding: 1rem 1.6rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--surface-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Floating Action Button (FAB) */
+  .chat-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 28px;
+    z-index: 999;
+    background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+    color: #ffffff;
+    border-radius: 28px;
+    padding: 0.8rem 1.4rem;
+    box-shadow: 0 4px 12px rgba(26,115,232,0.4);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .chat-fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(26,115,232,0.5);
+  }
+
+  /* Slide-in Chat Drawer */
+  .chat-drawer-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(32,33,36,0.3);
+    z-index: 1050;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .chat-drawer-backdrop.active {
+    display: block;
+    opacity: 1;
+  }
+  .chat-drawer {
+    position: fixed;
+    top: 0;
+    right: -480px;
+    width: 460px;
+    max-width: 92vw;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: -4px 0 24px rgba(60,64,67,0.25);
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .chat-drawer.open {
+    right: 0;
+  }
+  .drawer-header {
+    padding: 1rem 1.4rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+  }
+  .drawer-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .gemini-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4285F4 0%, #9B72CB 50%, #D96570 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+  }
+  .drawer-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--surface-bg);
+  }
+  .chat-bubble {
+    max-width: 86%;
+    padding: 0.8rem 1rem;
+    border-radius: 16px;
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+  .bubble-user {
+    align-self: flex-end;
+    background: var(--google-blue);
+    color: #ffffff;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble-agent {
+    align-self: flex-start;
+    background: #ffffff;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+  }
+  .bubble-agent table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0;
+    font-size: 0.78rem;
+  }
+  .bubble-agent th, .bubble-agent td {
+    border: 1px solid var(--border-color);
+    padding: 0.35rem 0.5rem;
+  }
+  .bubble-agent th {
+    background: #f1f3f4;
+  }
+  .bubble-agent pre {
+    background: #202124;
+    color: #e8eaed;
+    padding: 0.6rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+  .drawer-chips {
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    background: #ffffff;
+    border-top: 1px solid var(--border-color);
+  }
+  .suggestion-chip {
+    white-space: nowrap;
+    padding: 0.4rem 0.8rem;
+    border-radius: 16px;
+    background: #f1f3f4;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    border: 1px solid #dadce0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .suggestion-chip:hover {
+    background: var(--google-blue-light);
+    color: var(--google-blue);
+    border-color: #c2e7ff;
+  }
+  .drawer-input-row {
+    padding: 0.9rem 1.2rem;
+    border-top: 1px solid var(--border-color);
+    background: #ffffff;
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+  }
+  .drawer-input {
+    flex: 1;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1rem;
+    font-size: 0.88rem;
+    outline: none;
+    font-family: inherit;
+  }
+  .drawer-input:focus {
+    border-color: var(--google-blue);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="google-top-strip"></div>
+
+<!-- Google Header -->
+<header>
+  <div class="header-left">
+    <div class="google-logo-box">
+      <span class="material-symbols-outlined google-logo-icon">cloud_done</span>
+      <span>Google Cloud</span>
+    </div>
+    <div class="header-divider"></div>
+    <div class="app-title">
+      <span class="material-symbols-outlined" style="color:var(--text-secondary);">swap_horizontal_circle</span>
+      SAP S/4HANA & BigQuery Data Governance Concierge
+    </div>
+  </div>
+
+  <div class="header-right">
+    <span class="google-chip chip-green">
+      <span class="material-symbols-outlined" style="font-size: 1rem;">verified</span>
+      BigQuery Connected
+    </span>
+    <span class="google-chip chip-blue">
+      <span class="material-symbols-outlined" style="font-size: 1rem;">sync_alt</span>
+      SAP BAPI Gateway Ready
+    </span>
+  </div>
+
+    <button class="g-btn g-btn-primary" onclick="toggleChatDrawer(true)">
+      <span class="material-symbols-outlined">smart_toy</span>
+      Asistente AI (En Vivo Vertex AI)
+    </button>
+
+</header>
+
+<div class="workspace-layout">
+  <!-- Google Left Navigation Sidebar -->
+  <aside class="g-sidebar">
+    <div class="sidebar-section-title">
+      <span class="material-symbols-outlined" style="font-size:1.1rem; color:var(--google-blue);">folder_open</span>
+      1. Datos Fuente y Configuración
+    </div>
+
+    <!-- Quick Load Demo & Reset Simulation Buttons -->
+    <button class="g-btn g-btn-tonal" style="width:100%; justify-content:center; background:#e8f0fe; color:#1a73e8; font-weight:600;" onclick="loadDemo100Dataset(true)">
+      <span class="material-symbols-outlined">auto_fix_high</span>
+      ⚡ Simular Carga con Errores (85% Precisión)
+    </button>
+    <div style="font-size:0.75rem; color:var(--text-secondary); text-align:center; margin-top:-0.3rem;">
+      Inyecta 120 discrepancias en BigQuery para simular correcciones
+    </div>
+
+    <div class="g-dropzone" onclick="document.getElementById('csvFileInput').click()">
+      <span class="material-symbols-outlined" style="font-size: 2rem; color: var(--google-blue);">upload_file</span>
+      <div style="font-size: 0.88rem; font-weight: 500; margin-top: 0.3rem;">Cargar Archivo CSV de Referencia</div>
+      <div style="font-size: 0.75rem; color: var(--text-secondary);">Haz clic para seleccionar del equipo</div>
+      <input type="file" id="csvFileInput" accept=".csv" style="display:none;" onchange="handleCsvFile(event)">
+    </div>
+    <div id="fileNotice" style="display:none; font-size:0.8rem; color:var(--google-green); font-weight:500;"></div>
+
+    <div class="g-form-group">
+      <label class="g-label">Vista BigQuery (SAP Consolidada):</label>
+      <input type="text" id="viewName" class="g-input" value="v_sap_materials_100">
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.6rem;">
+      <div class="g-form-group">
+        <label class="g-label">Llave Primaria:</label>
+        <input type="text" id="primaryKey" class="g-input" value="material_id">
+      </div>
+      <div class="g-form-group">
+        <label class="g-label">Llave Secundaria:</label>
+        <input type="text" id="secondaryKey" class="g-input" value="plant_id">
+      </div>
+    </div>
+
+    <button class="g-btn g-btn-primary" style="width:100%; margin-top:0.2rem;" onclick="runReconciliation()">
+      <span class="material-symbols-outlined">search_check</span>
+      Ejecutar Conciliación y Validar
+    </button>
+
+    <hr style="border:none; border-top:1px solid var(--border-color); margin:0.4rem 0;">
+
+    <!-- Expert Approval Section -->
+    <div class="sidebar-section-title">
+      <span class="material-symbols-outlined" style="font-size:1.1rem; color:var(--google-green);">shield</span>
+      2. Autorización de Experto (Workflow SAP)
+    </div>
+
+    <div class="g-expert-card">
+      <div class="g-form-group">
+        <label class="g-label">Usuario Experto Aprobador:</label>
+        <input type="text" id="expertName" class="g-input" value="Ing. Carlos Mendoza (Lead SAP MM / Data Governance)">
+      </div>
+
+      <div class="g-form-group">
+        <label class="g-label">Clave de Autorización / Token:</label>
+        <input type="text" id="expertKey" class="g-input" value="SAP-AUTH-SEC-892147">
+      </div>
+
+      <div class="g-form-group">
+        <label class="g-label">Justificación de Negocio:</label>
+        <textarea id="expertJustification" class="g-textarea" rows="2">Ajuste de datos maestros tras auditoría de inventario mensual</textarea>
+      </div>
+
+      <div style="font-size:0.82rem; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center;">
+        <span>Seleccionados para SAP:</span>
+        <strong id="selectedCountBadge" style="color:var(--google-blue); font-size:1rem; font-weight:700;">0</strong>
+      </div>
+
+      <button class="g-btn g-btn-success" id="btnSyncSap" onclick="executeExpertSapSync()" disabled style="width:100%;">
+        <span class="material-symbols-outlined">send_and_archive</span>
+        Autorizar y Enviar a SAP (BAPI Sync)
+      </button>
+    </div>
+  </aside>
+
+  <!-- Google Main Canvas Area -->
+  <main class="g-main">
+    <!-- Success Banner (shown after SAP sync) -->
+    <div id="liveSuccessBanner" class="g-banner-success" style="display:none;">
+      <div style="display:flex; align-items:center; gap:0.6rem;">
+        <span class="material-symbols-outlined" style="font-size:1.4rem;">check_circle</span>
+        <div>
+          <strong id="bannerTitle">¡Carga en SAP S/4HANA Confirmada con Éxito!</strong>
+          <div id="bannerDetail" style="font-size:0.8rem; margin-top:0.1rem;">Los cambios autorizados han sido asentados en SAP y actualizados en BigQuery.</div>
+        </div>
+      </div>
+      <button onclick="document.getElementById('liveSuccessBanner').style.display='none'" style="border:none; background:none; cursor:pointer; color:#0d652d; font-weight:700;">✕</button>
+    </div>
+
+    <!-- Google KPI Cards Grid -->
+    <div class="g-kpi-grid">
+      <div class="g-kpi-card kpi-score" id="scoreCard">
+        <span class="kpi-label">Calificación de Calidad</span>
+        <div class="kpi-value" id="scoreMetric" style="color:var(--google-yellow);">
+          <span>--%</span>
+        </div>
+        <span class="kpi-subtext" id="scoreStatusDesc">Pendiente de conciliación</span>
+      </div>
+
+      <div class="g-kpi-card kpi-records">
+        <span class="kpi-label">Registros Evaluados</span>
+        <div class="kpi-value" id="recordsMetric" style="color:var(--google-blue);">--</div>
+        <span class="kpi-subtext">Materiales x Planta únicos</span>
+      </div>
+
+      <div class="g-kpi-card kpi-fields">
+        <span class="kpi-label">Campos Verificados</span>
+        <div class="kpi-value" id="fieldsMetric" style="color:#5f6368;">--</div>
+        <span class="kpi-subtext" id="matchedSubtext" style="color:var(--google-green);">-- coincidentes</span>
+      </div>
+
+      <div class="g-kpi-card kpi-discrepancies">
+        <span class="kpi-label">Discrepancias Detectadas</span>
+        <div class="kpi-value" id="discrepanciesMetric" style="color:var(--google-red);">--</div>
+        <span class="kpi-subtext">Requieren autorización de experto</span>
+      </div>
+    </div>
+
+    <!-- Google Filter Bar -->
+    <div class="g-filter-bar">
+      <div class="filter-controls-row">
+        <div class="search-pill-wrapper">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="filterSearch" class="search-pill" placeholder="Filtrar por ID de Material, valor, texto..." onkeyup="applyFilters()">
+        </div>
+
+        <div style="display:flex; align-items:center; gap:0.4rem;">
+          <span class="material-symbols-outlined" style="font-size:1.1rem; color:var(--text-secondary);">tune</span>
+          <select id="filterField" class="g-select" onchange="applyFilters()">
+            <option value="ALL">Todos los Campos</option>
+            <option value="unit_price">unit_price (Precio)</option>
+            <option value="description">description (Descripción)</option>
+            <option value="stock_quantity">stock_quantity (Inventario)</option>
+            <option value="status">status (Estado)</option>
+            <option value="category">category (Categoría)</option>
+            <option value="unit_of_measure">unit_of_measure (UoM)</option>
+            <option value="storage_location">storage_location (Almacén)</option>
+            <option value="batch_number">batch_number (Lote)</option>
+          </select>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:0.4rem;">
+          <select id="filterPlant" class="g-select" onchange="applyFilters()">
+            <option value="ALL">Todas las Plantas</option>
+            <option value="PL01">PL01</option>
+            <option value="PL02">PL02</option>
+            <option value="PL03">PL03</option>
+          </select>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:0.4rem;">
+          <select id="filterErrorType" class="g-select" onchange="applyFilters()">
+            <option value="ALL">Todos los Tipos de Error</option>
+            <option value="DATA_MISMATCH">DATA_MISMATCH (Divergencia)</option>
+            <option value="MISSING_RECORD">MISSING_RECORD (Faltante)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Discrepancy Table Card -->
+    <div class="g-table-card">
+      <div class="g-table-header">
+        <div class="g-table-title">
+          <span class="material-symbols-outlined" style="color:var(--google-blue);">table_chart</span>
+          Tabla de Discrepancias & Asignación para Carga SAP
+        </div>
+
+        <div style="display:flex; gap:0.5rem;">
+          <button class="g-btn g-btn-outlined" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="selectAllVisible(true)">
+            Seleccionar Visibles
+          </button>
+          <button class="g-btn g-btn-outlined" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="selectAllVisible(false)">
+            Deseleccionar
+          </button>
+        </div>
+      </div>
+
+      <div class="table-scroll-area">
+        <table class="g-table">
+          <thead>
+            <tr>
+              <th style="width:40px; text-align:center;">
+                <input type="checkbox" id="headerCheckbox" onchange="toggleSelectAll(this.checked)">
+              </th>
+              <th>Llaves (Material / Planta)</th>
+              <th>Campo Afectado</th>
+              <th>Dato Correcto (Archivo Fuente)</th>
+              <th>Dato Cargado (BigQuery SAP)</th>
+              <th>Tipo de Discrepancia</th>
+              <th>Destino SAP</th>
+            </tr>
+          </thead>
+          <tbody id="discrepancyTableBody">
+            <tr>
+              <td colspan="7" style="text-align:center; padding:3rem; color:var(--text-secondary);">
+                Cargando datos de conciliación...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Formal SAP Confirmation Certificate Modal (Google Design 3 Style) -->
+<div class="modal-backdrop" id="auditModal" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-header-hero">
+      <div class="modal-check-circle">
+        <span class="material-symbols-outlined" style="font-size:2.4rem;">verified</span>
+      </div>
+      <div>
+        <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; opacity:0.9;">Comprobante Oficial de Transmisión</div>
+        <div style="font-size:1.35rem; font-weight:700; margin-top:0.2rem;">Carga Confirmada y Asentada en SAP S/4HANA</div>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div style="font-size:0.9rem; color:var(--text-primary);">
+        Se ha completado la ejecución de la BAPI de actualización de datos maestros con estatus <b>EXITOSO</b> en el mandante productivo de SAP.
+      </div>
+
+      <div class="cert-grid" id="certGrid">
+        <!-- Filled dynamically -->
+      </div>
+
+      <div style="background:#e8f0fe; border-left:4px solid var(--google-blue); padding:0.75rem 1rem; border-radius:4px; font-size:0.82rem; color:#174ea6;">
+        <span class="material-symbols-outlined" style="font-size:1rem; vertical-align:middle;">info</span>
+        <b>Auditoría Sincronizada:</b> Las vistas de Google BigQuery y el ERP SAP S/4HANA han sido consolidados de manera consistente.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="g-btn g-btn-tonal" onclick="downloadCertificateJson()">
+        <span class="material-symbols-outlined">download</span>
+        Descargar Certificado Oficial (.json)
+      </button>
+
+      <button class="g-btn g-btn-primary" onclick="closeAuditModal()">
+        Aceptar y Continuar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentCsvContent = "";
+let rawDiscrepancies = [];
+let filteredDiscrepancies = [];
+let selectedItems = new Set();
+let latestReceipt = null;
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadDemo100Dataset();
+});
+
+async function loadDemo100Dataset(forceReset = true) {
+  try {
+    const notice = document.getElementById("fileNotice");
+    notice.style.display = "block";
+    notice.style.color = "var(--google-blue)";
+    notice.innerHTML = `<span class="material-symbols-outlined" style="font-size:0.9rem; vertical-align:middle; animation:spin 1s infinite linear;">sync</span> Inyectando 120 discrepancias en BigQuery (85.0% precisión)...`;
+
+    const res = await fetch(`/api/load_demo_csv?reset_bq=${forceReset}`);
+    const data = await res.json();
+    if (data.status === "SUCCESS") {
+      currentCsvContent = data.csv_content;
+      notice.style.color = "var(--google-green)";
+      notice.innerHTML = `✓ <b>Simulación Activa:</b> 100 filas x 10 cols con 120 discrepancias inyectadas (85% precisión).`;
+      await runReconciliation();
+    } else {
+      notice.style.color = "var(--google-red)";
+      notice.textContent = "Error al restablecer simulación: " + (data.message || "");
+    }
+  } catch (e) {
+    console.error("Error cargando demo CSV:", e);
+    document.getElementById("fileNotice").textContent = "Error: " + e.message;
+  }
+}
+
+function handleCsvFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    currentCsvContent = evt.target.result;
+    document.getElementById("fileNotice").style.display = "block";
+    document.getElementById("fileNotice").textContent = `✓ Archivo cargado: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+    runReconciliation();
+  };
+  reader.readAsText(file);
+}
+
+async function runReconciliation() {
+  if (!currentCsvContent) return;
+
+  const viewName = document.getElementById("viewName").value.trim();
+  const primaryKey = document.getElementById("primaryKey").value.trim();
+  const secondaryKey = document.getElementById("secondaryKey").value.trim();
+
+  document.getElementById("scoreMetric").innerHTML = `<span style="font-size:1.1rem; color:var(--text-secondary);">Validando...</span>`;
+
+  try {
+    const res = await fetch("/api/reconcile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        csv_content: currentCsvContent,
+        view_name: viewName,
+        primary_key: primaryKey,
+        secondary_key: secondaryKey
+      })
+    });
+    const result = await res.json();
+
+    if (result.error) {
+      alert("Error en conciliación: " + result.error);
+      return;
+    }
+
+    renderDashboardMetrics(result);
+    rawDiscrepancies = result.discrepancy_table || [];
+    selectedItems.clear();
+    applyFilters();
+  } catch (err) {
+    console.error("Error en validación:", err);
+  }
+}
+
+function renderDashboardMetrics(data) {
+  const score = data.match_score_pct;
+  const scoreMetricEl = document.getElementById("scoreMetric");
+  const scoreDescEl = document.getElementById("scoreStatusDesc");
+  const scoreCard = document.getElementById("scoreCard");
+
+  if (score >= 95) {
+    scoreMetricEl.style.color = "var(--google-green)";
+    scoreDescEl.textContent = "🟢 Calidad Alta / Asentado en SAP";
+    scoreCard.classList.add("score-green");
+  } else if (score >= 80) {
+    scoreMetricEl.style.color = "var(--google-yellow)";
+    scoreDescEl.textContent = "🟡 Calibrado: Requiere Aprobación";
+    scoreCard.classList.remove("score-green");
+  } else {
+    scoreMetricEl.style.color = "var(--google-red)";
+    scoreDescEl.textContent = "🔴 Discrepancias Críticas";
+    scoreCard.classList.remove("score-green");
+  }
+
+  scoreMetricEl.innerHTML = `${score}%`;
+  document.getElementById("recordsMetric").textContent = data.total_records_evaluated;
+  document.getElementById("fieldsMetric").textContent = data.total_fields_checked;
+  document.getElementById("matchedSubtext").textContent = `${data.total_fields_matched} campos correctos`;
+  document.getElementById("discrepanciesMetric").textContent = data.total_discrepancies;
+}
+
+function applyFilters() {
+  const fieldVal = document.getElementById("filterField").value;
+  const plantVal = document.getElementById("filterPlant").value;
+  const errorVal = document.getElementById("filterErrorType").value;
+  const searchVal = document.getElementById("filterSearch").value.toLowerCase().trim();
+
+  filteredDiscrepancies = rawDiscrepancies.filter(item => {
+    if (fieldVal !== "ALL" && item.field !== fieldVal) return false;
+    if (plantVal !== "ALL" && !item.record_id.includes(plantVal)) return false;
+    if (errorVal !== "ALL" && item.error_type !== errorVal) return false;
+    if (searchVal) {
+      const rowText = `${item.record_id} ${item.field} ${item.expected_csv_value} ${item.actual_bq_value}`.toLowerCase();
+      if (!rowText.includes(searchVal)) return false;
+    }
+    return true;
+  });
+
+  renderTable();
+}
+
+function renderTable() {
+  const tbody = document.getElementById("discrepancyTableBody");
+  tbody.innerHTML = "";
+
+  if (filteredDiscrepancies.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:3rem; color:var(--text-secondary);">
+      <span class="material-symbols-outlined" style="font-size:2rem; color:var(--google-green); vertical-align:middle;">task_alt</span><br>
+      <b>No hay discrepancias pendientes con los filtros seleccionados.</b>
+    </td></tr>`;
+    updateSelectedCount();
+    return;
+  }
+
+  filteredDiscrepancies.forEach((row, idx) => {
+    const isChecked = selectedItems.has(idx);
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td style="text-align:center;">
+        <input type="checkbox" onchange="toggleItem(${idx}, this.checked)" ${isChecked ? "checked" : ""}>
+      </td>
+      <td><strong>${row.record_id}</strong></td>
+      <td><code style="font-size:0.85rem; font-weight:600;">${row.field}</code></td>
+      <td><span class="tag-truth">${row.expected_csv_value}</span></td>
+      <td><span class="tag-bq">${row.actual_bq_value}</span></td>
+      <td><span style="font-size:0.75rem; background:#f1f3f4; padding:0.2rem 0.5rem; border-radius:12px; font-weight:500;">${row.error_type}</span></td>
+      <td>
+        <span style="font-size:0.8rem; color:var(--google-green); font-weight:500; display:flex; align-items:center; gap:0.25rem;">
+          <span class="material-symbols-outlined" style="font-size:1.1rem;">cloud_upload</span> S/4HANA MM
+        </span>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updateSelectedCount();
+}
+
+function toggleItem(idx, checked) {
+  if (checked) selectedItems.add(idx);
+  else selectedItems.delete(idx);
+  updateSelectedCount();
+}
+
+function selectAllVisible(select) {
+  filteredDiscrepancies.forEach((_, idx) => {
+    if (select) selectedItems.add(idx);
+    else selectedItems.delete(idx);
+  });
+  renderTable();
+}
+
+function toggleSelectAll(checked) {
+  selectAllVisible(checked);
+}
+
+function updateSelectedCount() {
+  const count = selectedItems.size;
+  document.getElementById("selectedCountBadge").textContent = count;
+  document.getElementById("btnSyncSap").disabled = count === 0;
+}
+
+async function executeExpertSapSync() {
+  if (selectedItems.size === 0) return;
+
+  const expertName = document.getElementById("expertName").value.trim();
+  const token = document.getElementById("expertKey").value.trim();
+  const justification = document.getElementById("expertJustification").value.trim();
+
+  const approvedList = [];
+  selectedItems.forEach(idx => {
+    const item = filteredDiscrepancies[idx];
+    if (!item) return;
+    
+    let matId = "";
+    let plantId = "";
+    item.record_id.split(",").forEach(p => {
+      const [k, v] = p.split("=").map(s => s.trim());
+      if (k === "material_id") matId = v;
+      if (k === "plant_id") plantId = v;
+    });
+
+    approvedList.push({
+      material_id: matId,
+      plant_id: plantId,
+      field: item.field,
+      approved_value: item.expected_csv_value
+    });
+  });
+
+  const btn = document.getElementById("btnSyncSap");
+  btn.disabled = true;
+  btn.innerHTML = `<span class="material-symbols-outlined">hourglass_top</span> Transmitiendo a SAP...`;
+
+  try {
+    const res = await fetch("/api/sync_sap", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        approved_corrections: approvedList,
+        expert_user: expertName,
+        justification: justification,
+        authorization_token: token,
+        table_name: "sap_materials_100"
+      })
+    });
+    const receipt = await res.json();
+    latestReceipt = receipt;
+
+    // Show Confirmation Modal
+    showConfirmationModal(receipt, approvedList.length);
+
+    // Show persistent banner
+    document.getElementById("liveSuccessBanner").style.display = "flex";
+    document.getElementById("bannerTitle").textContent = `¡Carga Confirmada en SAP! Batch: ${receipt.sap_batch_id}`;
+    document.getElementById("bannerDetail").textContent = `Se actualizaron ${receipt.total_fields_updated} campos en SAP S/4HANA y Google BigQuery.`;
+
+    // Recalculate reconciliation
+    await runReconciliation();
+  } catch (err) {
+    alert("Error de transmisión a SAP: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<span class="material-symbols-outlined">send_and_archive</span> Autorizar y Enviar a SAP (BAPI Sync)`;
+  }
+}
+
+function showConfirmationModal(receipt, count) {
+  const modal = document.getElementById("auditModal");
+  const grid = document.getElementById("certGrid");
+
+  grid.innerHTML = `
+    <div class="cert-item">
+      <span class="cert-item-label">Documento Oficial SAP:</span>
+      <span class="cert-item-value"><code>${receipt.document_number}</code></span>
+    </div>
+    <div class="cert-item">
+      <span class="cert-item-label">ID de Lote / Batch Job:</span>
+      <span class="cert-item-value"><code>${receipt.sap_batch_id}</code></span>
+    </div>
+    <div class="cert-item">
+      <span class="cert-item-label">Mandante S/4HANA:</span>
+      <span class="cert-item-value">${receipt.sap_client}</span>
+    </div>
+    <div class="cert-item">
+      <span class="cert-item-label">Interfaz / Protocolo:</span>
+      <span class="cert-item-value">${receipt.sap_interface}</span>
+    </div>
+    <div class="cert-item">
+      <span class="cert-item-label">Usuario Experto:</span>
+      <span class="cert-item-value">${receipt.authorized_by}</span>
+    </div>
+    <div class="cert-item">
+      <span class="cert-item-label">Token de Firma:</span>
+      <span class="cert-item-value"><code>${receipt.authorization_token}</code></span>
+    </div>
+    <div class="cert-item">
+      <span class="cert-item-label">Campos Actualizados:</span>
+      <span class="cert-item-value" style="color:var(--google-green); font-weight:700;">${receipt.total_fields_updated} campos</span>
+    </div>
+    <div class="cert-item">
+      <span class="cert-item-label">Fecha y Hora UTC:</span>
+      <span class="cert-item-value">${receipt.timestamp_utc}</span>
+    </div>
+    <div class="cert-item" style="grid-column: 1 / -1;">
+      <span class="cert-item-label">Firma Criptográfica SHA-256:</span>
+      <span class="cert-item-value" style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; word-break:break-all; color:var(--text-secondary);">${receipt.integrity_hash_sha256}</span>
+    </div>
+  `;
+
+  modal.style.display = "flex";
+}
+
+function closeAuditModal() {
+  document.getElementById("auditModal").style.display = "none";
+}
+
+function downloadCertificateJson() {
+  if (!latestReceipt) return;
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(latestReceipt, null, 2));
+  const dlAnchorElem = document.createElement("a");
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", `${latestReceipt.document_number}_sap_confirmation.json`);
+  dlAnchorElem.click();
+}
+
+function toggleChatDrawer(open) {
+  const drawer = document.getElementById("chatDrawer");
+  const backdrop = document.getElementById("chatBackdrop");
+  if (open) {
+    drawer.classList.add("open");
+    backdrop.classList.add("active");
+    setTimeout(() => document.getElementById("drawerTextInput").focus(), 300);
+  } else {
+    drawer.classList.remove("open");
+    backdrop.classList.remove("active");
+  }
+}
+
+function handleDrawerKeyPress(e) {
+  if (e.key === "Enter") {
+    sendDrawerMessage();
+  }
+}
+
+function sendQuickPrompt(text) {
+  document.getElementById("drawerTextInput").value = text;
+  sendDrawerMessage();
+}
+
+async function sendDrawerMessage() {
+  const input = document.getElementById("drawerTextInput");
+  const text = input.value.trim();
+  if (!text) return;
+
+  const container = document.getElementById("drawerMessages");
+
+  // Append user bubble
+  const userBubble = document.createElement("div");
+  userBubble.className = "chat-bubble bubble-user";
+  userBubble.textContent = text;
+  container.appendChild(userBubble);
+  input.value = "";
+  container.scrollTop = container.scrollHeight;
+
+  // Append loading bubble
+  const loadingBubble = document.createElement("div");
+  loadingBubble.className = "chat-bubble bubble-agent";
+  loadingBubble.innerHTML = `<span class="material-symbols-outlined" style="font-size:1rem; vertical-align:middle; animation:spin 1s infinite linear;">sync</span> <i>Consultando agente en Vertex AI Agent Engine...</i>`;
+  container.appendChild(loadingBubble);
+  container.scrollTop = container.scrollHeight;
+
+  try {
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+    const data = await res.json();
+    loadingBubble.remove();
+
+    const parts = data.parts || [];
+    parts.forEach(p => {
+      const agentBubble = document.createElement("div");
+      agentBubble.className = "chat-bubble bubble-agent";
+      // Format simple markdown
+      let formatted = (p.text || "")
+        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+        .replace(/\*(.*?)\*/g, '<i>$1</i>')
+        .replace(/`(.*?)`/g, '<code style="background:#f1f3f4; padding:2px 4px; border-radius:4px; font-family:monospace;">$1</code>')
+        .replace(/\n/g, '<br>');
+      agentBubble.innerHTML = formatted;
+      container.appendChild(agentBubble);
+    });
+  } catch (err) {
+    loadingBubble.remove();
+    const errBubble = document.createElement("div");
+    errBubble.className = "chat-bubble bubble-agent";
+    errBubble.style.color = "var(--google-red)";
+    errBubble.textContent = "Error comunicando con Vertex AI: " + err.message;
+    container.appendChild(errBubble);
+  }
+  container.scrollTop = container.scrollHeight;
+}
+
+</script>
+
+
+<!-- Chat Floating Action Button -->
+<div class="chat-fab" onclick="toggleChatDrawer(true)">
+  <span class="material-symbols-outlined" style="font-size:1.4rem;">auto_awesome</span>
+  <span>Hablar con Agente (Vertex AI)</span>
+</div>
+
+<!-- Slide-in Chat Drawer Backdrop & Container -->
+<div class="chat-drawer-backdrop" id="chatBackdrop" onclick="toggleChatDrawer(false)"></div>
+<div class="chat-drawer" id="chatDrawer">
+  <div class="google-top-strip"></div>
+  <div class="drawer-header">
+    <div class="drawer-title-group">
+      <div class="gemini-avatar">
+        <span class="material-symbols-outlined" style="font-size:1.3rem;">auto_awesome</span>
+      </div>
+      <div>
+        <div style="font-size:0.95rem; font-weight:700;">SAP Governance Agent</div>
+        <div style="font-size:0.75rem; color:var(--google-green); display:flex; align-items:center; gap:0.25rem;">
+          <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--google-green);"></span>
+          Desplegado en Vertex AI (A2A Protocol)
+        </div>
+      </div>
+    </div>
+    <button onclick="toggleChatDrawer(false)" style="border:none; background:none; cursor:pointer; font-size:1.2rem; color:var(--text-secondary);">✕</button>
+  </div>
+
+  <div class="drawer-messages" id="drawerMessages">
+    <div class="chat-bubble bubble-agent">
+      👋 <b>¡Hola! Soy tu Agente de Gobernanza de Datos SAP en Vertex AI.</b><br><br>
+      Estoy conectado en vivo a <b>Google BigQuery</b> y al protocolo <b>A2A</b>. Puedo consultar tablas y vistas, analizar discrepancias o coordinar la carga hacia SAP S/4HANA.
+    </div>
+  </div>
+
+  <!-- Suggestion Chips -->
+  <div class="drawer-chips">
+    <div class="suggestion-chip" onclick="sendQuickPrompt('¿Qué vistas tienes disponibles en BigQuery?')">🔍 Vistas en BigQuery</div>
+    <div class="suggestion-chip" onclick="sendQuickPrompt('¿Cuál es el esquema de v_sap_materials_100?')">📋 Esquema 10 cols</div>
+    <div class="suggestion-chip" onclick="sendQuickPrompt('¿Cómo funciona el flujo de autorización hacia SAP?')">🛡️ Flujo SAP BAPI</div>
+  </div>
+
+  <div class="drawer-input-row">
+    <input type="text" id="drawerTextInput" class="drawer-input" placeholder="Pregunta algo al agente desplegado..." onkeypress="handleDrawerKeyPress(event)">
+    <button class="g-btn g-btn-primary" style="padding:0.55rem 0.9rem; border-radius:50%; width:40px; height:40px;" onclick="sendDrawerMessage()">
+      <span class="material-symbols-outlined" style="font-size:1.2rem;">send</span>
+    </button>
+  </div>
+</div>
+
+</body>
+</html>
